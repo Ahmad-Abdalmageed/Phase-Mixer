@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1209</width>
+    <width>1038</width>
     <height>811</height>
    </rect>
   </property>
@@ -24,7 +24,8 @@
   </property>
   <property name="font">
    <font>
-    <family>TeX Gyre Chorus</family>
+    <family>Sarai</family>
+    <pointsize>16</pointsize>
    </font>
   </property>
   <property name="windowTitle">
@@ -39,7 +40,7 @@
         <property name="spacing">
          <number>0</number>
         </property>
-        <item row="4" column="1">
+        <item row="3" column="2">
          <widget class="QWidget" name="imageTwoMods" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -49,8 +50,14 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>0</width>
             <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
            </size>
           </property>
           <property name="sizeIncrement">
@@ -61,7 +68,7 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="0">
+        <item row="2" column="0">
          <widget class="QLabel" name="label_2">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
@@ -71,7 +78,7 @@
           </property>
           <property name="font">
            <font>
-            <family>TeX Gyre Chorus</family>
+            <family>Sarai</family>
             <pointsize>20</pointsize>
             <weight>50</weight>
             <italic>false</italic>
@@ -83,7 +90,7 @@
           </property>
          </widget>
         </item>
-        <item row="1" column="1">
+        <item row="1" column="2">
          <widget class="QWidget" name="imageOneMods" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -93,8 +100,14 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>0</width>
             <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
            </size>
           </property>
           <property name="sizeIncrement">
@@ -105,7 +118,23 @@
           </property>
          </widget>
         </item>
-        <item row="4" column="0">
+        <item row="1" column="1">
+         <spacer name="verticalSpacer_4">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Maximum</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>200</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="0">
          <widget class="QWidget" name="imageTwoOrigin" native="true">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -115,8 +144,14 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>0</width>
             <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
            </size>
           </property>
           <property name="sizeIncrement">
@@ -137,7 +172,7 @@
           </property>
           <property name="font">
            <font>
-            <family>TeX Gyre Chorus</family>
+            <family>Sarai</family>
             <pointsize>20</pointsize>
            </font>
           </property>
@@ -149,8 +184,13 @@
           </property>
          </widget>
         </item>
-        <item row="0" column="1">
+        <item row="0" column="2">
          <widget class="QComboBox" name="comboBox_3">
+          <property name="font">
+           <font>
+            <family>Sarai</family>
+           </font>
+          </property>
           <item>
            <property name="text">
             <string>Magnitude</string>
@@ -183,8 +223,14 @@
           </property>
           <property name="minimumSize">
            <size>
-            <width>150</width>
+            <width>0</width>
             <height>0</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>16777215</height>
            </size>
           </property>
           <property name="sizeIncrement">
@@ -195,8 +241,13 @@
           </property>
          </widget>
         </item>
-        <item row="3" column="1">
+        <item row="2" column="2">
          <widget class="QComboBox" name="comboBox_2">
+          <property name="font">
+           <font>
+            <family>Sarai</family>
+           </font>
+          </property>
           <item>
            <property name="text">
             <string>Magnitude</string>
@@ -219,28 +270,18 @@
           </item>
          </widget>
         </item>
-        <item row="2" column="1">
-         <spacer name="horizontalSpacer">
+        <item row="3" column="1">
+         <spacer name="verticalSpacer_3">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Vertical</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Maximum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="0">
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
+            <width>20</width>
+            <height>200</height>
            </size>
           </property>
          </spacer>
@@ -260,6 +301,11 @@
           </item>
           <item row="0" column="1">
            <widget class="QComboBox" name="comboBox_4">
+            <property name="font">
+             <font>
+              <family>Sarai</family>
+             </font>
+            </property>
             <item>
              <property name="text">
               <string>Image 1</string>
@@ -274,6 +320,11 @@
           </item>
           <item row="0" column="0">
            <widget class="QLabel" name="label_4">
+            <property name="font">
+             <font>
+              <family>Sarai</family>
+             </font>
+            </property>
             <property name="text">
              <string>Component 1</string>
             </property>
@@ -281,6 +332,11 @@
           </item>
           <item row="1" column="2">
            <widget class="QComboBox" name="comboBox_7">
+            <property name="font">
+             <font>
+              <family>Sarai</family>
+             </font>
+            </property>
             <item>
              <property name="text">
               <string>Magnitude</string>
@@ -317,6 +373,11 @@
         </item>
         <item row="0" column="1">
          <widget class="QComboBox" name="comboBox">
+          <property name="font">
+           <font>
+            <family>Sarai</family>
+           </font>
+          </property>
           <item>
            <property name="text">
             <string>Output 1</string>
@@ -331,6 +392,11 @@
         </item>
         <item row="0" column="0">
          <widget class="QLabel" name="label_3">
+          <property name="font">
+           <font>
+            <family>Sarai</family>
+           </font>
+          </property>
           <property name="text">
            <string>Mixer Output</string>
           </property>
@@ -340,6 +406,11 @@
          <layout class="QGridLayout" name="gridLayout_4">
           <item row="0" column="0">
            <widget class="QLabel" name="label_8">
+            <property name="font">
+             <font>
+              <family>Sarai</family>
+             </font>
+            </property>
             <property name="text">
              <string>Component 2</string>
             </property>
@@ -347,6 +418,11 @@
           </item>
           <item row="0" column="1">
            <widget class="QComboBox" name="comboBox_5">
+            <property name="font">
+             <font>
+              <family>Sarai</family>
+             </font>
+            </property>
             <item>
              <property name="text">
               <string>Image 1</string>
@@ -368,6 +444,11 @@
           </item>
           <item row="1" column="2">
            <widget class="QComboBox" name="comboBox_9">
+            <property name="font">
+             <font>
+              <family>Sarai</family>
+             </font>
+            </property>
             <item>
              <property name="text">
               <string>Magnitude</string>
@@ -465,6 +546,12 @@
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>300</height>
+         </size>
+        </property>
        </widget>
       </item>
       <item row="0" column="1">
@@ -475,8 +562,20 @@
           <height>20</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <family>Sarai</family>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
         <property name="text">
          <string>Output 2</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -488,8 +587,20 @@
           <height>20</height>
          </size>
         </property>
+        <property name="font">
+         <font>
+          <family>Sarai</family>
+          <pointsize>20</pointsize>
+         </font>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::NoFrame</enum>
+        </property>
         <property name="text">
          <string>Output 1</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignCenter</set>
         </property>
        </widget>
       </item>
@@ -507,6 +618,12 @@
           <height>0</height>
          </size>
         </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>300</height>
+         </size>
+        </property>
        </widget>
       </item>
      </layout>
@@ -518,8 +635,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1209</width>
-     <height>26</height>
+     <width>1038</width>
+     <height>28</height>
     </rect>
    </property>
   </widget>
