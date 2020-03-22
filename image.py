@@ -8,6 +8,7 @@ class image():
         self.imageFourier = None
         self.imageFourierInv = None
         self.dataType = None
+        self.imageShape = None
 
     def loadImage(self, path: str):
         """
@@ -17,6 +18,15 @@ class image():
         self.imageData = cv.imread(path)
         self.imageData = cv.cvtColor(self.imageData, cv.COLOR_RGB2GRAY)/255.0
         self.dataType = self.imageData.dtype
+        self.imageShape = self.imageData.shape
+        print("the image shape is ", self.imageShape)
+
+    def clear(self):
+        """
+        clear all data in image object
+        :return:
+        """
+        self.__init__()
 
     def fourierTransform(self):
         self.imageFourier = cv.dft(self.imageData)
@@ -45,7 +55,7 @@ class mixer2Image():
         self.imagesPhase = []
         self.imagesMagnitude = []
 
-    def addImage(self, image):
+    def addImage(self, image: image):
         self.imagesTransformed.append(image)
 
         self.imagesMagnitude.append(image.magnitude())
@@ -55,9 +65,9 @@ class mixer2Image():
 
     def mixRealImg(self, R: float, I:float, img: int) -> complex:
         real = R * self.realComponents[img] + (1-R)*self.realComponents[~img]
-        print(real)
+        # print(real)
         imaginary = I * self.imaginaryComponents[img] + (1-I)*self.imaginaryComponents[~img]
-        print(imaginary)
+        # print(imaginary)
         return np.complex(real, imaginary)
 
     def mixPhaseMagnitude(self):
@@ -73,14 +83,17 @@ if __name__ == '__main__':
     img2 = image()
     img2.loadImage("TestImages/landscape-4938188_640.jpg")
     img2.fourierTransform()
+    #
+    # mixer = mixer2Image()
+    #
+    # mixer.addImage(img1)
+    # mixer.addImage(img2)
+    #
+    # output1 = mixer.mixRealImg(0.6,0.8, 0)
+    img1.clear()
 
-    mixer = mixer2Image()
+    # print(output1)
 
-    mixer.addImage(img1)
-    mixer.addImage(img2)
-
-    output1 = mixer.mixRealImg(0.6,0.8, 0)
-    print(output1)
 
 
 
