@@ -6,6 +6,7 @@ class image():
     def __init__(self):
         self.imageData = None
         self.imageFourier = None
+        self.imageFourierShifted = None
         self.imageFourierInv = None
         self.dataType = None
         self.imageShape = None
@@ -28,8 +29,11 @@ class image():
         """
         self.__init__()
 
-    def fourierTransform(self):
-        self.imageFourier = cv.dft(self.imageData)
+    def fourierTransform(self, shifted: bool = False): # TODO : check output is complex for shifting 
+        self.imageFourier = cv.dft(self.imageData, flags=cv.DFT_COMPLEX_OUTPUT)
+        print(self.imageFourier.dtype)
+        if shifted: self.imageFourierShifted = np.fft.fftshift(self.imageFourier)
+        print(self.imageFourierShifted)
 
     def inverseFourier(self):
         self.imageFourierInv = cv.idft(self.imageFourier)
@@ -40,11 +44,13 @@ class image():
     def imaginaryComponent(self):
         return np.imag(self.imageFourier)
 
-    def magnitude(self):
-            return np.abs(self.imageFourier)
+    def magnitude(self, logScale:bool = False):
+        if logScale : return 20*np.log(np.abs(self.imageFourier))
+        else: return np.abs(self.imageFourier)
 
-    def phase(self):
-        return np.angle(self.imageFourier)
+    def phase(self, shifted: bool = False):
+        if shifted : return np.angle(self.imageFourierShifted)
+        else: return np.angle(self.imageFourier)
 
 
 class mixer2Image():

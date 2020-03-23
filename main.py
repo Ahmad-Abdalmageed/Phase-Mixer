@@ -1,10 +1,9 @@
 # Main Application Program
 import mainUI as ui
-from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import image
 from functools import partial
-
 
 class phaseMonster(ui.Ui_MainWindow):
     # Main Application Class
@@ -23,22 +22,27 @@ class phaseMonster(ui.Ui_MainWindow):
         self.cmbxs = [self.image1Cmbx, self.image2Cmbx, self.mixerOutput, self.mixerCmbx1, self.mixerCmbx2,
                       self.component1, self.component2]
 
-        self.modCmbxs = [self.image1Cmbx, self.image2Cmbx]
+        self.showCmbxs = [self.image1Cmbx, self.image2Cmbx]
         self.componentCmbxs = [self.mixerCmbx1, self.mixerCmbx2]
 
         self.loadbtns = [self.img1Load, self.img2Load]
 
         # loop settings
-        # imageView settigs
+        # imageView settings
         for img in self.imageWidgets:
             img.ui.histogram.hide()
             img.ui.roiBtn.hide()
             img.ui.menuBtn.hide()
             img.ui.roiPlot.hide()
             img.view.setBackgroundColor([255.0, 255.0, 255.0])
-        # buttons settigns
+
+        # buttons settings
         for btn in self.loadbtns:
             btn.clicked.connect(partial(self.loadImage, btn.property('image')))
+
+        for bx in self.showCmbxs:
+            bx.activated.connect(partial(self.selectComponents, bx.property('image')))
+
 
     def loadImage(self, image: int):
         """
@@ -49,33 +53,48 @@ class phaseMonster(ui.Ui_MainWindow):
         self.imageName, self.imageFormat = QtWidgets.QFileDialog.getOpenFileName(None, "Load Image %s" % image,
                                                                                  filter="*.jpg")
         if self.imageName == "":
+            print("user cancelled loading")
             pass
         else:
             if image == 1:
-                self.showImage(self.image1, self.imageOneOrigin, self.imageName)
-
+                self.showImage(self.image1, self.imageOneOrigin, imageName= self.imageName)
             elif image == 2:
-                self.showImage(self.image2, self.imageTwoOrigin, self.imageName)
-
+                self.showImage(self.image2, self.imageTwoOrigin, imageName= self.imageName)
             else:
                 print("some Error")
 
-    def showImage(self, imageInst, widget, imageName):
+    def showImage(self, imageInst, widget, checkShape: bool = True, widgetData : bytearray = None, imageName: str =None):
         """
         responsible for loading the image in the specified widget
         """
-        imageInst.loadImage(imageName)
-        widget.setImage(imageInst.imageData.T)
-        widget.view.setAspectLocked(False)
-        widget.view.setRange(xRange=[0, imageInst.imageShape[1]]
-                             , yRange=[0, imageInst.imageShape[0]], padding=0)
+        if imageName is not None: imageInst.loadImage(imageName)
+        if widgetData is not None :
+            widget.setImage(widgetData)
+        else:
+            widget.setImage(imageInst.imageData.T)
 
-        if self.image1.imageShape != self.image2.imageShape and self.image1.imageShape != None and self.image2.imageShape != None:
+        widget.view.setAspectLocked(False)
+        widget.view.setRange(xRange=[0, imageInst.imageShape[1]],
+                             yRange=[0, imageInst.imageShape[0]], padding=0)
+        print("done")
+        if checkShape and self.image1.imageShape != self.image2.imageShape and self.image1.imageShape != None and self.image2.imageShape != None:
             self.showMessage("Warning", "You loaded two different sizes of images, Please choose another",
                              QMessageBox.Ok, QMessageBox.Warning)
             widget.clear()
             imageInst.clear()
 
+    def selectComponents(self, image: int):
+        if image == 1:
+            # get current mode
+            # get data according to current mode
+            # show image using show image
+            self.image1.fourierTransform(shifted=True)
+            if self.image1Cmbx.currentText() == 'Magnitude':
+                self.showImage(self.image1, self.imageOneMods,checkShape=False,
+                               widgetData= self.image1.magnitude(logScale= True).T)
+            if self.image1Cmbx.currentText() == "Phase":
+                self.showImage(self.image1, self.imageOneMods,checkShape=False,
+                               widgetData= self.image1.phase(shifted= True).T)
 
     def showMessage(self, header, message, button, icon):
         """
@@ -93,22 +112,6 @@ class phaseMonster(ui.Ui_MainWindow):
         msg.setStandardButtons(button)
         msg.exec_()
 
-        # # pg.setConfigOption('imageAxisOrder', 'row-major')
-        # self.img = cv2.imread("TestImages/lelouch_lamperouge_code_geass_zero_102069_1920x1080.jpg")[:, :, 0]
-        # print(self.img.ndim)
-        # print(self.img.T.shape)
-        # print(self.img.dtype)
-        #
-        # self.imageTwoOrigin.setImage(self.img.T, autoHistogramRange=True)
-        #
-        # self.imageTwoOrigin.view.setAspectLocked(False)
-        # self.imageTwoOrigin.view.setRange(xRange=[0, self.img.T.shape[0]], yRange=[0, self.img.T.shape[1]], padding=0)
-        # self.imageTwoOrigin.ui.histogram.hide()
-        # self.imageTwoOrigin.ui.roiBtn.hide()
-        # self.imageTwoOrigin.ui.menuBtn.hide()
-        # self.imageTwoOrigin.ui.roiPlot.hide()
-
-
 if __name__ == "__main__":
     import sys
 
@@ -117,7 +120,4 @@ if __name__ == "__main__":
     ui = phaseMonster(MainWindow)
     MainWindow.show()
     sys.exit(app.exec_())
-    #
-    # import pyqtgraph.examples
-    #
-    # pyqtgraph.examples.run()
+
