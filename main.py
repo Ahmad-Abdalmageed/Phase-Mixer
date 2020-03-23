@@ -9,7 +9,7 @@ class phaseMonster(ui.Ui_MainWindow):
     # Main Application Class
     def __init__(self, starterWindow):
         super(phaseMonster, self).setupUi(starterWindow)
-        self.mixer = image.mixer2Image  # holds the mixer object from image.py
+        self.mixer = image.mixer2Image()  # holds the mixer object from image.py
         self.image1 = image.image()  # holds the image object from image.py
         self.image2 = image.image()  # holds the image object from image.py
         self.imagesShapes = []  # holds images shapes loaded to be checked
@@ -43,29 +43,90 @@ class phaseMonster(ui.Ui_MainWindow):
         for bx in self.showCmbxs:
             bx.activated.connect(partial(self.selectComponents, bx.property('image')))
 
+        self.mixerOutput.activated.connect(self.chosenOutput())
 
-    def loadImage(self, image: int):
+
+    def loadImage(self, Indx: int):
         """
         maintains the loading of both images processes
-        :return: None
+        ============= =====================================================================
+        **Arguments**
+        Indx          an integer key to the image sent
+        ============= =====================================================================
         """
-        print(image)
-        self.imageName, self.imageFormat = QtWidgets.QFileDialog.getOpenFileName(None, "Load Image %s" % image,
+        print(Indx)
+        self.imageName, self.imageFormat = QtWidgets.QFileDialog.getOpenFileName(None, "Load Image %s" % Indx,
                                                                                  filter="*.jpg")
         if self.imageName == "":
             print("user cancelled loading")
             pass
         else:
-            if image == 1:
+            if Indx == 1:
                 self.showImage(self.image1, self.imageOneOrigin, imageName= self.imageName)
-            elif image == 2:
+                self.imageOneMods.clear()
+                try:
+                    self.selectComponents(Indx)
+                except ValueError:  # this case happens when the user loads a different sized images
+                    print("user loaded different sizes, image%s"%Indx)
+                    pass
+            elif Indx == 2:
                 self.showImage(self.image2, self.imageTwoOrigin, imageName= self.imageName)
+                self.imageTwoMods.clear()
+                try:
+                    self.selectComponents(Indx)
+                except ValueError: # this case happens when the user loads a different sized images
+                    print("user loaded different sizes, image %s "%Indx)
+                    pass
             else:
                 print("some Error")
 
+    def selectComponents(self, image: int):
+        if image == 1: self.showComponent(self.image1Cmbx.currentText(), self.image1, self.imageOneMods)
+        elif image == 2 : self.showComponent(self.image2Cmbx.currentText(), self.image2, self.imageTwoMods)
+        else: print("error here")
+
+    def showComponent(self, mode: str, imageInst, widget, shifted :bool =True, checkShape: bool = False,
+                      logScale:bool = True):
+        """
+        a case responsible function which routes the modes selected by user to be shown
+        ============= =====================================================================
+        **Arguments**
+        mode:         the mode selected by user.
+        imageInst:    the image modified.
+        widget:       the widget to be set.
+        shifted:      a boolean which shifts the fourier transform and get the phase.
+        checkShape:   boolean to skip shape checking as it is done already.
+        logScale:     a boolean which scales the required mod by 20 * log(component).
+        ============= =====================================================================
+        """
+        imageInst.fourierTransform(shifted=shifted)
+        if mode == 'Magnitude':
+            self.showImage(imageInst, widget, checkShape=checkShape,
+                           widgetData=imageInst.magnitude(logScale=logScale).T)
+
+        if mode == "Phase":
+            self.showImage(imageInst, widget, checkShape=checkShape,
+                           widgetData= imageInst.phase(shifted=shifted).T)
+
+        if mode == "Real Component":
+            self.showImage(imageInst, widget, checkShape=checkShape,
+                           widgetData= imageInst.realComponent(logScale).T)
+
+        if mode == "Imaginary Component":
+            self.showImage(imageInst, widget, checkShape=checkShape,
+                           widgetData= imageInst.imaginaryComponent(logScale).T)
+
     def showImage(self, imageInst, widget, checkShape: bool = True, widgetData : bytearray = None, imageName: str =None):
         """
-        responsible for loading the image in the specified widget
+        Responsible for showing any image of any component in the specified widget
+        ============= ===================================================================================
+        **Arguments**
+         imageInst:   the image class.
+         widget:      the widget to be plotted to.
+         checkShape:  boolean if True, checks the shape of the loaded images.
+         widgetData:  a numpy array if exists will set the widget data to this array.
+         imageName:   the path to the image if not none then the function load this image and plot it.
+        ============= ===================================================================================
         """
         if imageName is not None: imageInst.loadImage(imageName)
         if widgetData is not None :
@@ -83,27 +144,26 @@ class phaseMonster(ui.Ui_MainWindow):
             widget.clear()
             imageInst.clear()
 
-    def selectComponents(self, image: int):
-        if image == 1:
-            # get current mode
-            # get data according to current mode
-            # show image using show image
-            self.image1.fourierTransform(shifted=True)
-            if self.image1Cmbx.currentText() == 'Magnitude':
-                self.showImage(self.image1, self.imageOneMods,checkShape=False,
-                               widgetData= self.image1.magnitude(logScale= True).T)
-            if self.image1Cmbx.currentText() == "Phase":
-                self.showImage(self.image1, self.imageOneMods,checkShape=False,
-                               widgetData= self.image1.phase(shifted= True).T)
+    def chosenOutput(self):
+        if self.mixerOutput.currentText() == "Output 1":
+            pass
+        elif self.mixerOutput.currentText() == "Output 2":
+            pass
+        else: print("Some error in output choosen")
+
+    def showOutputMixed(self):
+        pass
 
     def showMessage(self, header, message, button, icon):
         """
         responsible for showing message boxes
-        :param header:Box header title
-        :param message: the informative message to be shown
-        :param button: button type
-        :param icon: icon type
-        :return: None
+        ============= ===================================================================================
+        **Arguments**
+        header:       Box header title.
+        message       the informative message to be shown.
+        button:       button type.
+        icon:         icon type.
+        ============= ===================================================================================
         """
         msg = QMessageBox()
         msg.setWindowTitle(header)
