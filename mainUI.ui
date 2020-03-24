@@ -796,6 +796,21 @@
           <layout class="QGridLayout" name="gridLayout_3">
            <item row="0" column="2">
             <widget class="QSlider" name="slider1">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="pageStep">
+              <number>5</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+             <property name="sliderPosition">
+              <number>100</number>
+             </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -852,27 +867,12 @@
              </item>
              <item>
               <property name="text">
-               <string>Phase</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
                <string>Real Component</string>
               </property>
              </item>
              <item>
               <property name="text">
-               <string>Imaginary Component</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
                <string>Uniform Magnitude</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Uniform Phase </string>
               </property>
              </item>
             </widget>
@@ -957,6 +957,21 @@
            </item>
            <item row="0" column="2">
             <widget class="QSlider" name="slider2">
+             <property name="minimum">
+              <number>1</number>
+             </property>
+             <property name="maximum">
+              <number>100</number>
+             </property>
+             <property name="pageStep">
+              <number>5</number>
+             </property>
+             <property name="value">
+              <number>100</number>
+             </property>
+             <property name="sliderPosition">
+              <number>100</number>
+             </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
              </property>
@@ -969,11 +984,9 @@
                <family>Sarai</family>
               </font>
              </property>
-             <item>
-              <property name="text">
-               <string>Magnitude</string>
-              </property>
-             </item>
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
              <item>
               <property name="text">
                <string>Phase</string>
@@ -981,17 +994,7 @@
              </item>
              <item>
               <property name="text">
-               <string>Real Component</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
                <string>Imaginary Component</string>
-              </property>
-             </item>
-             <item>
-              <property name="text">
-               <string>Uniform Magnitude</string>
               </property>
              </item>
              <item>

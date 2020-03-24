@@ -30,11 +30,12 @@ class image():
         self.imageFourier = None  # Fourier Transformation
         self.imageFourierShifted = None  # Shifted Fourier
         self.imageFourierInv = None  # Fourier Inverse
+        self.imageFourierInvShifted = None # Shifted Fourier Inverse
         self.dataType = None  # The image data type
         self.imageShape = None  # the image shape
         self.__epsilon = 10**-8  # a value used to avoid dividing by zero
 
-    def loadImage(self, path: str):
+    def loadImage(self, path: str= None, data: np.ndarray = None, fourier: np.ndarray= None, imageShape : tuple= None):
         """
         Implements the following:
         * Loading the image from specified path
@@ -45,12 +46,23 @@ class image():
         Path               a string specifying the absolute path to image
         ================== ===========================================================================
         """
+        if data is not None:
+            self.imageData = data
+            self.imageShape= imageShape
+            print("instance made with sent data")
 
-        self.imageData = cv.imread(path)
-        self.imageData = cv.cvtColor(self.imageData, cv.COLOR_RGB2GRAY)/255.0
-        self.dataType = self.imageData.dtype
-        self.imageShape = self.imageData.shape
-        print("the image shape is ", self.imageShape)
+        elif fourier is not None:
+            self.imageFourier = fourier
+            self.imageShape = imageShape
+            print("image is set with transformed data")
+        else:
+            if path is not None:
+                self.imageData = cv.imread(path)
+                self.imageData = cv.cvtColor(self.imageData, cv.COLOR_RGB2GRAY)/255.0
+                self.dataType = self.imageData.dtype
+                self.imageShape = self.imageData.shape
+                print("the image loaded shape is ", self.imageShape)
+            else: print("No Given path"); pass
 
     def clear(self):
         """
@@ -69,11 +81,12 @@ class image():
         self.imageFourier = np.fft.fft2(self.imageData)
         if shifted: self.imageFourierShifted = np.fft.fftshift(self.imageFourier)
 
-    def inverseFourier(self):
+    def inverseFourier(self, shifted: bool = False):
         """
         Applies Inverse Fourier Transform on the image Fourier`s data and save it in specified attribute
         """
-        self.imageFourierInv = np.fft.ifft2(self.imageFourier)
+        self.imageFourierInv = np.real(np.fft.ifft2(self.imageFourier))
+        # if shifted : self.imageFourierInvShifted = np.fft.ifft2(self.imageFourierShifted)
 
     def realComponent(self, logScale: bool = False):
         """
@@ -167,7 +180,7 @@ class mixer2Image():
         else:
             self.__addImage(image, shifted)
 
-    def mixer(self, w1: float, w2: float, img: int, mode: Modes):
+    def mix(self, w1: float, w2: float, img1: int, img2:int, mode: Modes):
         """
         The mask mixing function which routes the user to the mode mixing functions according to the mode provided.
         Implements the following:
@@ -187,34 +200,59 @@ class mixer2Image():
         ================== ===========================================================================
         """
         if mode == Modes.magnitudePhase :
-            return self.__mixPhaseMagnitude(w1, w2, img)
+            return self.__mixPhaseMagnitude(w1, w2, img1, img2)
         elif mode == Modes.realImaginary :
-            return self.__mixRealImg(w1, w2, img)
+            return self.__mixRealImg(w1, w2, img1, img2)
         else:
             print("error with the mode")
+    def deleteImage(self, img: int):
+        """
+        Responsible for deleting certain image from lists
+        ================== ===========================================================================
+        **Parameters**
+        img                an integer indicating which image to be deleted
+        ================== ===========================================================================
+        """
+        try:
+            for value in self.__dict__.values():
+                value.pop(img)
+        except IndexError:
+            print("This index is not added")
+            pass
 
-    def __mixRealImg(self, R: float, I:float, img: int) -> np.ndarray:
+    def clear(self):
+        """
+        Responsible for clearing all class lists
+        """
+        try:
+            for key in self.__dict__.keys():
+                self.__dict__[key] = []
+        except ImportError:
+            print("There are no images added to be deleted")
+            pass
+
+    def __mixRealImg(self, R: float, I:float, img1: int, img2: int) -> np.ndarray:
         """
         ** Read mixer Documentation
         Mode Real/ Imaginary mix.
         Implements the following mix:
         mix = (R * realComponent1 + (1-R) * realComponent2) + j * (I * imaginaryComponent1 + (1-I) * imaginaryComponent2)
         """
-        real = R * self.realComponents[img] + (1-R)*self.realComponents[~img]
-        imaginary = I * self.imaginaryComponents[img] + (1-I)*self.imaginaryComponents[~img]
+        real = R * self.realComponents[img1] + (1-R)*self.realComponents[img2]
+        imaginary = I * self.imaginaryComponents[img2] + (1-I)*self.imaginaryComponents[img2]
         return real + 1j * imaginary
 
 
-    def __mixPhaseMagnitude(self, M: float, P:float, img:int) -> np.ndarray:
+    def __mixPhaseMagnitude(self, M: float, P:float, img1:int, img2:int) -> np.ndarray:
         """
         ** Read mixer Documentation
         Mode Phase/ Magnitude mix.
         Implements the following mix:
         mix = (M * magnitude1 + (1-M) * magnitude2) * exp (P * phase1 + (1-P) * phase2)
         """
-        magnitude = M * self.imagesMagnitude[img] + (1-M) * self.imagesMagnitude[~img]
-        exponentPower = P * self.imagesPhase[img] + (1-P) * self.imagesPhase[~img]
-        return magnitude * np.exp(exponentPower)
+        magnitude = M * self.imagesMagnitude[img1] + (1-M) * self.imagesMagnitude[img2]
+        exponentPower = P * self.imagesPhase[img2] + (1-P) * self.imagesPhase[img2]
+        return magnitude * np.exp(1j * exponentPower)
 
     def __addImage(self, instance, shifted: bool = False):
         """
@@ -243,10 +281,11 @@ if __name__ == '__main__':
 
     mixer = mixer2Image()
     mixer.addImage([img1, img2])
+    mixer.deleteImage(1)
 
-    output1 = mixer.mixer(0.6, 0.8,0, Modes.magnitudePhase)
-    print(output1[:1])
-    print(output1.shape)
+    # output1 = mixer.mixer(0.6, 0.8,0, Modes.magnitudePhase)
+    # print(output1[:1])
+    # print(output1.shape)
 
 
 

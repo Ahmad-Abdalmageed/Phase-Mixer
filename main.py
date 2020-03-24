@@ -12,18 +12,21 @@ class phaseMonster(ui.Ui_MainWindow):
         self.mixer = image.mixer2Image()  # holds the mixer object from image.py
         self.image1 = image.image()  # holds the image object from image.py
         self.image2 = image.image()  # holds the image object from image.py
+        self.out1 = image.image()
+        self.out2 = image.image()
         self.imagesShapes = []  # holds images shapes loaded to be checked
         self.images = [self.image1, self.image2]  # not used may be deleted later
 
         # UI components
         self.imageWidgets = [self.imageOneOrigin, self.imageTwoOrigin, self.imageOneMods, self.imageTwoMods,
                              self.output1, self.output2]
-        self.sliders = [self.component1, self.component2]
+        self.sliders = [self.slider1, self.slider2]
         self.cmbxs = [self.image1Cmbx, self.image2Cmbx, self.mixerOutput, self.mixerCmbx1, self.mixerCmbx2,
-                      self.component1, self.component2]
+                      self.component1, self.component2]  # not used maybe deleted later
 
         self.showCmbxs = [self.image1Cmbx, self.image2Cmbx]
-        self.componentCmbxs = [self.mixerCmbx1, self.mixerCmbx2]
+        self.mixerCmbxs = [self.mixerCmbx1, self.mixerCmbx2]
+        self.componentCmbxs = [self.component1, self.component2]
 
         self.loadbtns = [self.img1Load, self.img2Load]
 
@@ -43,8 +46,14 @@ class phaseMonster(ui.Ui_MainWindow):
         for bx in self.showCmbxs:
             bx.activated.connect(partial(self.selectComponents, bx.property('image')))
 
-        self.mixerOutput.activated.connect(self.chosenOutput())
+        self.mixerOutput.currentTextChanged.connect(partial(self.chosenOutput, 0))
 
+        for index, mxrbx in enumerate(self.mixerCmbxs):
+            mxrbx.currentTextChanged.connect(partial(self.chosenOutput, index))
+        for index, component in enumerate(self.componentCmbxs):
+            component.currentTextChanged.connect(partial(self.chosenOutput, index))
+        for index, slider in enumerate(self.sliders):
+            slider.valueChanged.connect(partial(self.chosenOutput, index))
 
     def loadImage(self, Indx: int):
         """
@@ -63,7 +72,10 @@ class phaseMonster(ui.Ui_MainWindow):
         else:
             if Indx == 1:
                 self.showImage(self.image1, self.imageOneOrigin, imageName= self.imageName)
+                self.mixer.deleteImage(0)
+                self.mixer.addImage(self.image1)
                 self.imageOneMods.clear()
+                self.chosenOutput(0)
                 try:
                     self.selectComponents(Indx)
                 except ValueError:  # this case happens when the user loads a different sized images
@@ -71,7 +83,10 @@ class phaseMonster(ui.Ui_MainWindow):
                     pass
             elif Indx == 2:
                 self.showImage(self.image2, self.imageTwoOrigin, imageName= self.imageName)
+                self.mixer.deleteImage(1)
+                self.mixer.addImage(self.image2, shifted=True)
                 self.imageTwoMods.clear()
+                self.chosenOutput(0)
                 try:
                     self.selectComponents(Indx)
                 except ValueError: # this case happens when the user loads a different sized images
@@ -81,6 +96,13 @@ class phaseMonster(ui.Ui_MainWindow):
                 print("some Error")
 
     def selectComponents(self, image: int):
+        """
+        Masking Fucntion which routes the user choice of component to be shown to the showing functions
+        ============= =====================================================================
+        **Arguments**
+        image         an integer indicating which image is chosen
+        ============= =====================================================================
+        """
         if image == 1: self.showComponent(self.image1Cmbx.currentText(), self.image1, self.imageOneMods)
         elif image == 2 : self.showComponent(self.image2Cmbx.currentText(), self.image2, self.imageTwoMods)
         else: print("error here")
@@ -128,7 +150,7 @@ class phaseMonster(ui.Ui_MainWindow):
          imageName:   the path to the image if not none then the function load this image and plot it.
         ============= ===================================================================================
         """
-        if imageName is not None: imageInst.loadImage(imageName)
+        if imageName is not None: imageInst.loadImage(path = imageName)
         if widgetData is not None :
             widget.setImage(widgetData)
         else:
@@ -138,25 +160,29 @@ class phaseMonster(ui.Ui_MainWindow):
         widget.view.setRange(xRange=[0, imageInst.imageShape[1]],
                              yRange=[0, imageInst.imageShape[0]], padding=0)
         print("done")
-        if checkShape and self.image1.imageShape != self.image2.imageShape and self.image1.imageShape != None and self.image2.imageShape != None:
+        if checkShape and self.image1.imageShape != self.image2.imageShape and \
+                self.image1.imageShape != None and self.image2.imageShape != None:
             self.showMessage("Warning", "You loaded two different sizes of images, Please choose another",
                              QMessageBox.Ok, QMessageBox.Warning)
             widget.clear()
             imageInst.clear()
 
-    def chosenOutput(self):
+    def chosenOutput(self, component: int):
         if self.mixerOutput.currentText() == "Output 1":
-            pass
-        elif self.mixerOutput.currentText() == "Output 2":
-            pass
-        else: print("Some error in output choosen")
+            self.out1.loadImage(fourier= self.__mixer(component), imageShape=self.image1.imageShape)
+            self.out1.inverseFourier()
+            self.showImage(self.out1, self.output1, False, self.out1.imageFourierInv.T)
 
-    def showOutputMixed(self):
-        pass
+        elif self.mixerOutput.currentText() == "Output 2":
+            self.out2.loadImage(fourier= self.__mixer(component))
+            self.out2.inverseFourier()
+            self.showImage(self.out2, self.output2, False, self.out2.imageFourierInv.T)
+
+        else: print("Some error in output chosen")
 
     def showMessage(self, header, message, button, icon):
         """
-        responsible for showing message boxes
+        Responsible for showing message boxes
         ============= ===================================================================================
         **Arguments**
         header:       Box header title.
@@ -171,6 +197,26 @@ class phaseMonster(ui.Ui_MainWindow):
         msg.setIcon(icon)
         msg.setStandardButtons(button)
         msg.exec_()
+
+    def __mixer(self, component: int) -> "numpy.ndarray":
+        print("Mixing")
+        if self.componentCmbxs[component] == "Magnitude" or "Phase":
+            print("mag/ph mode")
+            self.componentCmbxs[~component].setCurrentIndex(0)
+            return self.mixer.mix(self.sliders[component].value()/100, self.sliders[~component].value()/100,
+                           self.mixerCmbxs[component].currentIndex(),
+                           self.mixerCmbxs[~component].currentIndex(),
+                           mode= image.Modes.magnitudePhase)
+
+        if self.componentCmbxs[component] == "Real Component" or "Imaginary Component":
+            print("R/I mode")
+            self.componentCmbxs[~component].setCurrentIndex(1)
+            return self.mixer.mix(self.sliders[component].value()/100, self.sliders[~component].value()/100,
+                           self.mixerCmbx1.currentIndex(), self.mixerCmbx2.currentIndex(),
+                           mode=image.Modes.realImaginary)
+
+        if self.component1.currentText() == "Uniform Magnitude":
+            pass
 
 if __name__ == "__main__":
     import sys
