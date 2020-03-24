@@ -239,7 +239,7 @@ class mixer2Image():
         mix = (R * realComponent1 + (1-R) * realComponent2) + j * (I * imaginaryComponent1 + (1-I) * imaginaryComponent2)
         """
         real = R * self.realComponents[img1] + (1-R)*self.realComponents[img2]
-        imaginary = I * self.imaginaryComponents[img2] + (1-I)*self.imaginaryComponents[img2]
+        imaginary = I * self.imaginaryComponents[img1] + (1-I)*self.imaginaryComponents[img2]
         return real + 1j * imaginary
 
 
@@ -251,7 +251,7 @@ class mixer2Image():
         mix = (M * magnitude1 + (1-M) * magnitude2) * exp (P * phase1 + (1-P) * phase2)
         """
         magnitude = M * self.imagesMagnitude[img1] + (1-M) * self.imagesMagnitude[img2]
-        exponentPower = P * self.imagesPhase[img2] + (1-P) * self.imagesPhase[img2]
+        exponentPower = P * self.imagesPhase[img1] + (1-P) * self.imagesPhase[img2]
         return magnitude * np.exp(1j * exponentPower)
 
     def __addImage(self, instance, shifted: bool = False):

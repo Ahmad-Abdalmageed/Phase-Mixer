@@ -23,8 +23,8 @@ class phaseMonster(ui.Ui_MainWindow):
         self.sliders = [self.slider1, self.slider2]
         self.cmbxs = [self.image1Cmbx, self.image2Cmbx, self.mixerOutput, self.mixerCmbx1, self.mixerCmbx2,
                       self.component1, self.component2]  # not used maybe deleted later
-
         self.showCmbxs = [self.image1Cmbx, self.image2Cmbx]
+
         self.mixerCmbxs = [self.mixerCmbx1, self.mixerCmbx2]
         self.componentCmbxs = [self.component1, self.component2]
 
@@ -174,7 +174,7 @@ class phaseMonster(ui.Ui_MainWindow):
             self.showImage(self.out1, self.output1, False, self.out1.imageFourierInv.T)
 
         elif self.mixerOutput.currentText() == "Output 2":
-            self.out2.loadImage(fourier= self.__mixer(component))
+            self.out2.loadImage(fourier= self.__mixer(component), imageShape=self.image1.imageShape)
             self.out2.inverseFourier()
             self.showImage(self.out2, self.output2, False, self.out2.imageFourierInv.T)
 
@@ -199,21 +199,21 @@ class phaseMonster(ui.Ui_MainWindow):
         msg.exec_()
 
     def __mixer(self, component: int) -> "numpy.ndarray":
+
         print("Mixing")
         if self.componentCmbxs[component] == "Magnitude" or "Phase":
             print("mag/ph mode")
-            self.componentCmbxs[~component].setCurrentIndex(0)
-            return self.mixer.mix(self.sliders[component].value()/100, self.sliders[~component].value()/100,
+            return self.mixer.mix(self.sliders[0].value()/10, self.sliders[1].value()/10,
                            self.mixerCmbxs[component].currentIndex(),
                            self.mixerCmbxs[~component].currentIndex(),
                            mode= image.Modes.magnitudePhase)
 
         if self.componentCmbxs[component] == "Real Component" or "Imaginary Component":
             print("R/I mode")
-            self.componentCmbxs[~component].setCurrentIndex(1)
-            return self.mixer.mix(self.sliders[component].value()/100, self.sliders[~component].value()/100,
-                           self.mixerCmbx1.currentIndex(), self.mixerCmbx2.currentIndex(),
-                           mode=image.Modes.realImaginary)
+            return self.mixer.mix(self.sliders[0].value()/10, self.sliders[1].value()/10,
+                                  self.mixerCmbxs[component].currentIndex(),
+                                  self.mixerCmbxs[~component].currentIndex(),
+                                  mode=image.Modes.realImaginary)
 
         if self.component1.currentText() == "Uniform Magnitude":
             pass
