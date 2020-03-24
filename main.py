@@ -50,8 +50,10 @@ class phaseMonster(ui.Ui_MainWindow):
 
         for index, mxrbx in enumerate(self.mixerCmbxs):
             mxrbx.currentTextChanged.connect(partial(self.chosenOutput, index))
+
         for index, component in enumerate(self.componentCmbxs):
             component.currentTextChanged.connect(partial(self.chosenOutput, index))
+
         for index, slider in enumerate(self.sliders):
             slider.valueChanged.connect(partial(self.chosenOutput, index))
 
@@ -159,7 +161,7 @@ class phaseMonster(ui.Ui_MainWindow):
         widget.view.setAspectLocked(False)
         widget.view.setRange(xRange=[0, imageInst.imageShape[1]],
                              yRange=[0, imageInst.imageShape[0]], padding=0)
-        print("done")
+
         if checkShape and self.image1.imageShape != self.image2.imageShape and \
                 self.image1.imageShape != None and self.image2.imageShape != None:
             self.showMessage("Warning", "You loaded two different sizes of images, Please choose another",
@@ -168,18 +170,21 @@ class phaseMonster(ui.Ui_MainWindow):
             imageInst.clear()
 
     def chosenOutput(self, component: int):
-        if self.mixerOutput.currentText() == "Output 1":
-            self.out1.loadImage(fourier= self.__mixer(component), imageShape=self.image1.imageShape)
-            self.out1.inverseFourier()
-            self.showImage(self.out1, self.output1, False, self.out1.imageFourierInv.T)
+        try:
+            if self.mixerOutput.currentText() == "Output 1":
+                self.out1.loadImage(fourier= self.__mixer(component), imageShape=self.image1.imageShape)
+                self.out1.inverseFourier()
+                self.showImage(self.out1, self.output1, False, self.out1.imageFourierInv.T)
 
-        elif self.mixerOutput.currentText() == "Output 2":
-            self.out2.loadImage(fourier= self.__mixer(component), imageShape=self.image1.imageShape)
-            self.out2.inverseFourier()
-            self.showImage(self.out2, self.output2, False, self.out2.imageFourierInv.T)
+            elif self.mixerOutput.currentText() == "Output 2":
+                self.out2.loadImage(fourier= self.__mixer(component), imageShape=self.image1.imageShape)
+                self.out2.inverseFourier()
+                self.showImage(self.out2, self.output2, False, self.out2.imageFourierInv.T)
 
-        else: print("Some error in output chosen")
-
+            else: print("Some error in output chosen")
+        except IndexError:
+            self.showMessage("Warning", "You did not load any image", QMessageBox.Ok, QMessageBox.Warning)
+            pass
     def showMessage(self, header, message, button, icon):
         """
         Responsible for showing message boxes
@@ -200,23 +205,30 @@ class phaseMonster(ui.Ui_MainWindow):
 
     def __mixer(self, component: int) -> "numpy.ndarray":
 
-        print("Mixing")
-        if self.componentCmbxs[component] == "Magnitude" or "Phase":
-            print("mag/ph mode")
+        if self.componentCmbxs[component].currentText() == "Magnitude" or self.componentCmbxs[component].currentText() == "Phase":
+            self.componentCmbxs[~component].setCurrentIndex(0)
+
+            print(self.mixerCmbxs[component].currentIndex())
+            print(self.mixerCmbxs[~component].currentIndex())
+
             return self.mixer.mix(self.sliders[0].value()/10, self.sliders[1].value()/10,
                            self.mixerCmbxs[component].currentIndex(),
-                           self.mixerCmbxs[~component].currentIndex(),
                            mode= image.Modes.magnitudePhase)
 
-        if self.componentCmbxs[component] == "Real Component" or "Imaginary Component":
-            print("R/I mode")
-            return self.mixer.mix(self.sliders[0].value()/10, self.sliders[1].value()/10,
+        if self.componentCmbxs[component].currentText() == "Real Component" or self.componentCmbxs[component].currentText() == "Imaginary Component":
+
+            print(self.mixerCmbxs[component].currentIndex())
+            print(self.mixerCmbxs[~component].currentIndex())
+
+            self.componentCmbxs[~component].setCurrentIndex(1)
+
+            return self.mixer.mix(self.sliders[component].value()/10, self.sliders[~component].value()/10,
                                   self.mixerCmbxs[component].currentIndex(),
-                                  self.mixerCmbxs[~component].currentIndex(),
                                   mode=image.Modes.realImaginary)
 
         if self.component1.currentText() == "Uniform Magnitude":
             pass
+
 
 if __name__ == "__main__":
     import sys

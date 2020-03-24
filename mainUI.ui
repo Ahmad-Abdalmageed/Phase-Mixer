@@ -806,10 +806,10 @@
               <number>1</number>
              </property>
              <property name="value">
-              <number>10</number>
+              <number>9</number>
              </property>
              <property name="sliderPosition">
-              <number>10</number>
+              <number>9</number>
              </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
@@ -967,10 +967,10 @@
               <number>1</number>
              </property>
              <property name="value">
-              <number>10</number>
+              <number>9</number>
              </property>
              <property name="sliderPosition">
-              <number>10</number>
+              <number>9</number>
              </property>
              <property name="orientation">
               <enum>Qt::Horizontal</enum>
