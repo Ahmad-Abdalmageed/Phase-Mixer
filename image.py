@@ -5,8 +5,8 @@ from typing import  Union
 import enum
 
 class Modes(enum.Enum):
-    magnitudePhase = "magnitudePhaseMod"
-    realImaginary = "realImaginaryMod"
+    magnitudePhase = "testMagAndPhaseMode"
+    realImaginary = "testRealAndImagMode"
 
 class image():
     """
@@ -100,7 +100,8 @@ class image():
         ================== ===========================================================================
         """
         if logScale : return 20*np.log(np.real(self.imageFourier)+ self.__epsilon)
-        else: return np.real(self.imageFourier)
+        else:
+            return np.real(self.imageFourier)
 
     def imaginaryComponent(self, logScale:bool = False):
         """
@@ -180,7 +181,7 @@ class mixer2Image():
         else:
             self.__addImage(image, shifted)
 
-    def mix(self, w1: float, w2: float, img1: int, img2:int, mode: Modes):
+    def mix(self, w1: float, w2: float, img1: int, img2:int, mode: Modes) -> np.ndarray:
         """
         The mask mixing function which routes the user to the mode mixing functions according to the mode provided.
         Implements the following:
