@@ -444,7 +444,12 @@
    </font>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>PhaseMonster</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>Icons/icons8-mixer-logo-512.png</normaloff>
+    <normalon>Icons/icons8-mixer-logo-512.png</normalon>Icons/icons8-mixer-logo-512.png</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QVBoxLayout" name="verticalLayout">

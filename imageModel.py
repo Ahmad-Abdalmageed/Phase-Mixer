@@ -4,7 +4,7 @@ from modesEnum import Modes
 import numpy as np
 import image
 
-class ImageModel(image.image):
+class ImageModel():
 
     """
     A class that represents the ImageModel
@@ -28,10 +28,19 @@ class ImageModel(image.image):
 
 
     def setting(self) -> image.image:
+        """
+        This function is responsible for loading the image.image class into the class
+        ================== ===========================================================================
+        ** Returns**
+        image              an instance from image.image
+        ================== ===========================================================================
+        """
+        # initializing the image
         self.image = image.image()
         self.image.loadImage(path=self.path)
         self.mixer.addImage(self.image)
 
+        # Assigning the attributes
         self.imgByte = self.image.imageData
         self.dft = self.image.imageFourier
         self.real = np.copy(self.image.realComponent())
