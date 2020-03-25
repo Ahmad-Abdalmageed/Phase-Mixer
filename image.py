@@ -238,8 +238,12 @@ class mixer2Image():
         Implements the following mix:
         mix = (R * realComponent1 + (1-R) * realComponent2) + j * (I * imaginaryComponent1 + (1-I) * imaginaryComponent2)
         """
-        real = R * self.realComponents[0] + (1-R)*self.realComponents[1]
-        imaginary = I * self.imaginaryComponents[0] + (1-I)*self.imaginaryComponents[1]
+        i1 = img1
+        i2 = img2
+        if img1 == img2 :
+            i2 = 1 - i2
+        real = R * self.realComponents[i1] + (1-R)*self.realComponents[i2]
+        imaginary = I * self.imaginaryComponents[i1] + (1-I)*self.imaginaryComponents[i2]
         return real + 1j * imaginary
 
     def __mixPhaseMagnitude(self, M: float, P:float, img1:int, img2:int) -> np.ndarray:
@@ -249,8 +253,12 @@ class mixer2Image():
         Implements the following mix:
         mix = (M * magnitude1 + (1-M) * magnitude2) * exp (P * phase1 + (1-P) * phase2)
         """
-        magnitude = M * self.imagesMagnitude[0] + (1-M) * self.imagesMagnitude[1]
-        exponentPower = P * self.imagesPhase[0] + (1-P) * self.imagesPhase[1]
+        i1 = img1
+        i2 = img2
+        if img1 == img2:
+            i2 = 1 - i2
+        magnitude = M * self.imagesMagnitude[i1] + (1-M) * self.imagesMagnitude[i2]
+        exponentPower = P * self.imagesPhase[i1] + (1-P) * self.imagesPhase[i2]
         return magnitude * np.exp(1j * exponentPower)
 
     def __addImage(self, instance, shifted: bool = False):

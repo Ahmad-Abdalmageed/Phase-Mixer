@@ -46,16 +46,17 @@ class phaseMonster(ui.Ui_MainWindow):
         for bx in self.showCmbxs:
             bx.activated.connect(partial(self.selectComponents, bx.property('image')))
 
-        self.mixerOutput.currentTextChanged.connect(partial(self.chosenOutput, 0))
+        self.mixerOutput.currentTextChanged.connect(self.chosenOutput)
 
         for index, mxrbx in enumerate(self.mixerCmbxs):
-            mxrbx.currentTextChanged.connect(partial(self.chosenOutput, index))
+            mxrbx.currentTextChanged.connect(self.chosenOutput)
+            mxrbx.currentTextChanged.connect(partial(self.setComponents, index))
 
         for index, component in enumerate(self.componentCmbxs):
-            component.currentTextChanged.connect(partial(self.chosenOutput, index))
+            component.currentTextChanged.connect(self.chosenOutput)
 
         for index, slider in enumerate(self.sliders):
-            slider.valueChanged.connect(partial(self.chosenOutput, index))
+            slider.valueChanged.connect(self.chosenOutput)
 
     def loadImage(self, Indx: int):
         """
@@ -77,7 +78,7 @@ class phaseMonster(ui.Ui_MainWindow):
                 self.mixer.deleteImage(0)
                 self.mixer.addImage(self.image1)
                 self.imageOneMods.clear()
-                self.chosenOutput(0)
+                self.chosenOutput()
                 try:
                     self.selectComponents(Indx)
                 except ValueError:  # this case happens when the user loads a different sized images
@@ -88,7 +89,7 @@ class phaseMonster(ui.Ui_MainWindow):
                 self.mixer.deleteImage(1)
                 self.mixer.addImage(self.image2, shifted=True)
                 self.imageTwoMods.clear()
-                self.chosenOutput(0)
+                self.chosenOutput()
                 try:
                     self.selectComponents(Indx)
                 except ValueError: # this case happens when the user loads a different sized images
@@ -169,22 +170,29 @@ class phaseMonster(ui.Ui_MainWindow):
             widget.clear()
             imageInst.clear()
 
-    def chosenOutput(self, component: int):
-        try:
+    def chosenOutput(self):
+        try: # TODO : Optimize this
             if self.mixerOutput.currentText() == "Output 1":
-                self.out1.loadImage(fourier= self.__mixer(component), imageShape=self.image1.imageShape)
+                self.out1.loadImage(fourier= self.__mixer(), imageShape=self.image1.imageShape)
                 self.out1.inverseFourier()
                 self.showImage(self.out1, self.output1, False, self.out1.imageFourierInv.T)
 
             elif self.mixerOutput.currentText() == "Output 2":
-                self.out2.loadImage(fourier= self.__mixer(component), imageShape=self.image1.imageShape)
+                self.out2.loadImage(fourier= self.__mixer(), imageShape=self.image1.imageShape)
                 self.out2.inverseFourier()
                 self.showImage(self.out2, self.output2, False, self.out2.imageFourierInv.T)
 
             else: print("Some error in output chosen")
         except IndexError:
-            self.showMessage("Warning", "You did not load any image", QMessageBox.Ok, QMessageBox.Warning)
+            self.showMessage("Heads Up", "Please Load another image for comparing part", QMessageBox.Ok, QMessageBox.Warning)
             pass
+
+    def setComponents(self, index):
+        if self.componentCmbxs[index] == "Magnitude" or self.componentCmbxs[index] == "Phase":
+            self.componentCmbxs[~index].setCurrentIndex(0)
+        if self.componentCmbxs[index] == "Real Component" or self.componentCmbxs[index] == "Imaginary Component":
+            self.componentCmbxs[~index].setCurrentIndex(1)
+
     def showMessage(self, header, message, button, icon):
         """
         Responsible for showing message boxes
@@ -203,32 +211,18 @@ class phaseMonster(ui.Ui_MainWindow):
         msg.setStandardButtons(button)
         msg.exec_()
 
-    def __mixer(self, component: int) -> "numpy.ndarray":
-
-        if self.componentCmbxs[component].currentText() == "Magnitude" or self.componentCmbxs[component].currentText() == "Phase":
-            self.componentCmbxs[~component].setCurrentIndex(0)
-
-            print(self.mixerCmbxs[component].currentIndex())
-            print(self.mixerCmbxs[~component].currentIndex())
-
+    def __mixer(self) -> "numpy.ndarray":
+        if self.componentCmbxs[0].currentText() == "Magnitude" and self.componentCmbxs[1].currentText() == "Phase":
+            print("MG/PH mode")
             return self.mixer.mix(self.sliders[0].value()/10, self.sliders[1].value()/10,
-                           self.mixerCmbxs[component].currentIndex(),
-                           mode= image.Modes.magnitudePhase)
+                           self.mixerCmbxs[0].currentIndex(), self.mixerCmbxs[1].currentIndex(), mode=image.Modes.magnitudePhase)
 
-        if self.componentCmbxs[component].currentText() == "Real Component" or self.componentCmbxs[component].currentText() == "Imaginary Component":
+        if self.componentCmbxs[1].currentText() == "Imaginary Component" and self.componentCmbxs[0].currentText() == "Real Component":
+            print("R/I mode")
+            return self.mixer.mix(self.sliders[0].value()/10, self.sliders[1].value()/10,
+                           self.mixerCmbxs[0].currentIndex(), self.mixerCmbxs[1].currentIndex(), mode=image.Modes.realImaginary)
 
-            print(self.mixerCmbxs[component].currentIndex())
-            print(self.mixerCmbxs[~component].currentIndex())
-
-            self.componentCmbxs[~component].setCurrentIndex(1)
-
-            return self.mixer.mix(self.sliders[component].value()/10, self.sliders[~component].value()/10,
-                                  self.mixerCmbxs[component].currentIndex(),
-                                  mode=image.Modes.realImaginary)
-
-        if self.component1.currentText() == "Uniform Magnitude":
-            pass
-
+        self.showMessage("Warning","Please Select a valid mode",QMessageBox.Ok, QMessageBox.Warning)
 
 if __name__ == "__main__":
     import sys
