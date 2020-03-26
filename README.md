@@ -12,9 +12,12 @@ An elegant program for mixing images, includes many features and modes .
 
 You can jump around and explore but the basic usage is as follows: 
 
-* Load the image in the slot you want from the loading button next to each slot ![1](readme/2020-03-26 01-12-09.png)
+* Load the image in the slot you want from the loading button next to each slot 
+![1](readme/2020-03-26 01-12-09.png)
 
-* you can choose from the components in combo box which component to show ![2](readme/2020-03-26 01-13-46.png)![3](readme/2020-03-26 01-14-14.png)
+* you can choose from the components in combo box which component to show 
+![2](readme/2020-03-26 01-13-46.png)
+![3](readme/2020-03-26 01-14-14.png)
 
 * output one is aleeady default you can choose a different one like two any time 
 
@@ -23,8 +26,7 @@ You can jump around and explore but the basic usage is as follows:
 * if you want different setting for components you can choose which component is which image from the combo boxes 
 
   below
-
-   ![5](readme/2020-03-26 01-19-04.png)
+![5](readme/2020-03-26 01-19-04.png)
 
   and bam you got yourself your first mix with PhaseMagniutde monster !!! 
 
@@ -33,10 +35,6 @@ You can jump around and explore but the basic usage is as follows:
 Here are some results from the mixer.
 
 * 70% Magnitude and 30% Phase from image 1 in output 1
-
 ![6](readme/2020-03-26 01-21-44.png)
-
 * 70% Real and 30% Imaginary from image one in output two
-
 ![7](readme/2020-03-26 01-26-49.png)
-
