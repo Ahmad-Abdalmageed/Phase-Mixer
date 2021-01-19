@@ -5,8 +5,11 @@ from typing import  Union
 import enum
 
 class Modes(enum.Enum):
-    magnitudePhase = "magnitudePhaseMod"
-    realImaginary = "realImaginaryMod"
+    """
+    Enum class for the modes provided by mixer2Image
+    """
+    magnitudePhase = "testMagAndPhaseMode"
+    realImaginary = "testRealAndImagMode"
 
 class image():
     """
@@ -41,10 +44,15 @@ class image():
         * Loading the image from specified path
         * Normalize the image values
         * Converting to Grey Scale
-        ================== ===========================================================================
+        ================== =============================================================================
         **Parameters**
-        Path               a string specifying the absolute path to image
-        ================== ===========================================================================
+        Path               a string specifying the absolute path to image, if provided loads this image
+                           to the class`s data
+        data               numpy array if provided loads this data directly
+        fourier            numpy array if provided loads the transformed data
+        imageShape         a tuple of ints identifying the image shape if any method is used except using
+                           path
+        ================== =============================================================================
         """
         if data is not None:
             self.imageData = data
@@ -81,14 +89,13 @@ class image():
         self.imageFourier = np.fft.fft2(self.imageData)
         if shifted: self.imageFourierShifted = np.fft.fftshift(self.imageFourier)
 
-    def inverseFourier(self, shifted: bool = False):
+    def inverseFourier(self):
         """
         Applies Inverse Fourier Transform on the image Fourier`s data and save it in specified attribute
         """
         self.imageFourierInv = np.real(np.fft.ifft2(self.imageFourier))
-        # if shifted : self.imageFourierInvShifted = np.fft.ifft2(self.imageFourierShifted)
 
-    def realComponent(self, logScale: bool = False):
+    def realComponent(self, logScale: bool = False) -> np.ndarray:
         """
         Extracts the image`s Real Component from the image`s Fourier data
         ================== ===========================================================================
@@ -100,9 +107,10 @@ class image():
         ================== ===========================================================================
         """
         if logScale : return 20*np.log(np.real(self.imageFourier)+ self.__epsilon)
-        else: return np.real(self.imageFourier)
+        else:
+            return np.real(self.imageFourier)
 
-    def imaginaryComponent(self, logScale:bool = False):
+    def imaginaryComponent(self, logScale:bool = False) -> np.ndarray:
         """
         Extracts the image`s Imaginary Component from the image`s Fourier data
         ================== ===========================================================================
@@ -117,12 +125,12 @@ class image():
         if logScale :return 20*np.log(np.imag(self.imageFourier)+self.__epsilon)
         else: return np.imag(self.imageFourier)
 
-    def magnitude(self, logScale:bool = False):
+    def magnitude(self, logScale:bool = False, uniform: bool = False)-> np.ndarray:
         """
         Extracts the image`s Magnitude Spectrum from the image`s Fourier data
         ================== ===========================================================================
         **Parameters**
-        LodScale           If true returns 20 * np.log(ImageFourier)
+        LodScale           If True returns 20 * np.log(ImageFourier)
         ================== ===========================================================================
         **Returns**
         array              a numpy array of the extracted data
@@ -131,7 +139,7 @@ class image():
         if logScale : return 20*np.log(np.abs(self.imageFourier))
         else: return np.abs(self.imageFourier)
 
-    def phase(self, shifted: bool = False):
+    def phase(self, shifted: bool = False, uniform: bool = False)-> np.ndarray:
         """
         Extracts the image`s Phase Spectrum from the image`s Fourier data
         ================== ===========================================================================
@@ -164,13 +172,14 @@ class mixer2Image():
         self.imaginaryComponents = []  # Holds extracted Imaginary Component from Image
         self.imagesPhase = []  # Holds Extracted Phase Spectrum from Image
         self.imagesMagnitude = []  # Holds Extracted Magnitude Spectrum from Image
+        self.imageShape = None
 
     def addImage(self, image: Union[image, list], shifted: bool = False):
         """
         Add inserted Image instances to the class either by a list or one Instance
         ================== ===========================================================================
         **Parameters**
-        image              A list of Image instances of just one instance
+        image              An instance of image.image or a list of instances
         shifted            If true returns components of a shifted fourier transform
         ================== ===========================================================================
         """
@@ -180,7 +189,8 @@ class mixer2Image():
         else:
             self.__addImage(image, shifted)
 
-    def mix(self, w1: float, w2: float, img1: int, img2:int, mode: Modes):
+    def mix(self, w1: float, w2: float, img1: int, img2:int, mode: Modes,
+            uniMag: bool=False, uniPhase: bool=False) -> np.ndarray:
         """
         The mask mixing function which routes the user to the mode mixing functions according to the mode provided.
         Implements the following:
@@ -191,7 +201,8 @@ class mixer2Image():
         **Parameters**
         w1                 (Float) first ratio
         w2                 (Float) Second ratio
-        img                (int) which is the image to apply the first ratio to
+        img1                (int) which is the image to apply the first ratio to
+        img1                (int) which is the image to apply the second ratio to
         mode               (Enum) which indicates the mode applied
         ================== ===========================================================================
         **Returns**
@@ -200,11 +211,12 @@ class mixer2Image():
         ================== ===========================================================================
         """
         if mode == Modes.magnitudePhase :
-            return self.__mixPhaseMagnitude(w1, w2, img1, img2)
+            return self.__mixPhaseMagnitude(w1, w2, img1, img2, uniMag, uniPhase)
         elif mode == Modes.realImaginary :
             return self.__mixRealImg(w1, w2, img1, img2)
         else:
             print("error with the mode")
+
     def deleteImage(self, img: int):
         """
         Responsible for deleting certain image from lists
@@ -215,7 +227,9 @@ class mixer2Image():
         """
         try:
             for value in self.__dict__.values():
-                value.pop(img)
+                print(value)
+                if isinstance(value, tuple): pass
+                else: value.pop(img)
         except IndexError:
             print("This index is not added")
             pass
@@ -246,7 +260,8 @@ class mixer2Image():
         imaginary = I * self.imaginaryComponents[i1] + (1-I)*self.imaginaryComponents[i2]
         return real + 1j * imaginary
 
-    def __mixPhaseMagnitude(self, M: float, P:float, img1:int, img2:int) -> np.ndarray:
+    def __mixPhaseMagnitude(self, M: float, P:float, img1:int, img2:int, uniMag: bool=False,
+                            uniPhase: bool=False) -> np.ndarray:
         """
         ** Read mixer Documentation
         Mode Phase/ Magnitude mix.
@@ -259,6 +274,10 @@ class mixer2Image():
             i2 = 1 - i2
         magnitude = M * self.imagesMagnitude[i1] + (1-M) * self.imagesMagnitude[i2]
         exponentPower = P * self.imagesPhase[i1] + (1-P) * self.imagesPhase[i2]
+
+        if uniMag: magnitude = np.ones(self.imageShape)
+        if uniPhase: exponentPower = np.zeros(self.imageShape)
+
         return magnitude * np.exp(1j * exponentPower)
 
     def __addImage(self, instance, shifted: bool = False):
@@ -267,6 +286,7 @@ class mixer2Image():
         Called by addImage which extracts all images components and add the in place
         """
         instance.fourierTransform(shifted)
+        self.imageShape= instance.imageShape
         self.imagesTransformed.append(instance)
         self.imagesMagnitude.append(instance.magnitude())
         self.imagesPhase.append(instance.phase())

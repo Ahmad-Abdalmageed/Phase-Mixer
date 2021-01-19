@@ -1,0 +1,328 @@
+2020-03-26 01:34:10,025 image from:/home/ahmad/PycharmProjects/Task3/TestImages/test.jpg
+2020-03-26 01:34:10,035 ImageView widget data set
+2020-03-26 01:34:10,103 mode chosen Mg/Ph
+2020-03-26 01:34:10,106 messege shown with Heads Up Please Load another image for comparing part 
+2020-03-26 01:34:11,171 loading done
+2020-03-26 01:34:11,181 selected Magnitude to be shown for ImageView
+2020-03-26 01:34:11,191 ImageView widget data set
+2020-03-26 01:34:13,270 image from:/home/ahmad/PycharmProjects/Task3/TestImages/test2.jpg
+2020-03-26 01:34:13,275 ImageView widget data set
+2020-03-26 01:34:13,292 mode chosen Mg/Ph
+2020-03-26 01:34:13,312 ImageView widget data set
+2020-03-26 01:34:13,312 output drawn
+2020-03-26 01:34:13,316 selected Magnitude to be shown for ImageView
+2020-03-26 01:34:13,323 ImageView widget data set
+2020-03-26 01:34:14,801 selected Phase to be shown for ImageView
+2020-03-26 01:34:14,815 ImageView widget data set
+2020-03-26 01:34:15,551 selected Magnitude to be shown for ImageView
+2020-03-26 01:34:15,562 ImageView widget data set
+2020-03-26 01:34:16,234 selected Phase to be shown for ImageView
+2020-03-26 01:34:16,249 ImageView widget data set
+2020-03-26 01:34:16,908 selected Real Component to be shown for ImageView
+2020-03-26 01:34:16,921 ImageView widget data set
+2020-03-26 01:34:17,592 selected Phase to be shown for ImageView
+2020-03-26 01:34:17,604 ImageView widget data set
+2020-03-26 01:34:18,806 selected Phase to be shown for ImageView
+2020-03-26 01:34:18,818 ImageView widget data set
+2020-03-26 01:34:19,607 selected Real Component to be shown for ImageView
+2020-03-26 01:34:19,617 ImageView widget data set
+2020-03-26 01:34:22,305 mode chosen Mg/Ph
+2020-03-26 01:34:22,339 ImageView widget data set
+2020-03-26 01:34:22,339 output drawn
+2020-03-26 01:34:23,135 mode chosen Mg/Ph
+2020-03-26 01:34:23,166 ImageView widget data set
+2020-03-26 01:34:23,166 output drawn
+2020-03-26 01:34:25,703 R/I mode
+2020-03-26 01:34:25,716 ImageView widget data set
+2020-03-26 01:34:25,716 output drawn
+2020-03-26 01:34:25,716 R/I mode
+2020-03-26 01:34:25,725 ImageView widget data set
+2020-03-26 01:34:25,725 output drawn
+2020-03-26 01:34:27,221 R/I mode
+2020-03-26 01:34:27,237 ImageView widget data set
+2020-03-26 01:34:27,237 output drawn
+2020-03-26 01:34:27,245 R/I mode
+2020-03-26 01:34:27,256 ImageView widget data set
+2020-03-26 01:34:27,257 output drawn
+2020-03-26 01:34:27,269 R/I mode
+2020-03-26 01:34:27,279 ImageView widget data set
+2020-03-26 01:34:27,279 output drawn
+2020-03-26 01:34:27,309 R/I mode
+2020-03-26 01:34:27,320 ImageView widget data set
+2020-03-26 01:34:27,321 output drawn
+2020-03-26 01:34:27,509 R/I mode
+2020-03-26 01:34:27,518 ImageView widget data set
+2020-03-26 01:34:27,518 output drawn
+2020-03-26 01:34:27,533 R/I mode
+2020-03-26 01:34:27,542 ImageView widget data set
+2020-03-26 01:34:27,542 output drawn
+2020-03-26 01:34:27,549 R/I mode
+2020-03-26 01:34:27,559 ImageView widget data set
+2020-03-26 01:34:27,559 output drawn
+2020-03-26 01:34:27,781 R/I mode
+2020-03-26 01:34:27,789 ImageView widget data set
+2020-03-26 01:34:27,790 output drawn
+2020-03-26 01:34:27,805 R/I mode
+2020-03-26 01:34:27,813 ImageView widget data set
+2020-03-26 01:34:27,813 output drawn
+2020-03-26 01:34:27,829 R/I mode
+2020-03-26 01:34:27,837 ImageView widget data set
+2020-03-26 01:34:27,838 output drawn
+2020-03-26 01:34:27,893 R/I mode
+2020-03-26 01:34:27,902 ImageView widget data set
+2020-03-26 01:34:27,903 output drawn
+2020-03-26 01:34:28,125 R/I mode
+2020-03-26 01:34:28,134 ImageView widget data set
+2020-03-26 01:34:28,134 output drawn
+2020-03-26 01:34:28,165 R/I mode
+2020-03-26 01:34:28,174 ImageView widget data set
+2020-03-26 01:34:28,174 output drawn
+2020-03-26 01:34:28,989 R/I mode
+2020-03-26 01:34:29,003 ImageView widget data set
+2020-03-26 01:34:29,003 output drawn
+2020-03-26 01:34:29,013 R/I mode
+2020-03-26 01:34:29,021 ImageView widget data set
+2020-03-26 01:34:29,021 output drawn
+2020-03-26 01:34:29,045 R/I mode
+2020-03-26 01:34:29,053 ImageView widget data set
+2020-03-26 01:34:29,053 output drawn
+2020-03-26 01:34:29,109 R/I mode
+2020-03-26 01:34:29,117 ImageView widget data set
+2020-03-26 01:34:29,117 output drawn
+2020-03-26 01:34:29,173 R/I mode
+2020-03-26 01:34:29,181 ImageView widget data set
+2020-03-26 01:34:29,182 output drawn
+2020-03-26 01:34:29,285 R/I mode
+2020-03-26 01:34:29,293 ImageView widget data set
+2020-03-26 01:34:29,293 output drawn
+2020-03-26 01:34:29,333 R/I mode
+2020-03-26 01:34:29,341 ImageView widget data set
+2020-03-26 01:34:29,341 output drawn
+2020-03-26 01:34:29,621 R/I mode
+2020-03-26 01:34:29,629 ImageView widget data set
+2020-03-26 01:34:29,630 output drawn
+2020-03-26 01:34:29,669 R/I mode
+2020-03-26 01:34:29,678 ImageView widget data set
+2020-03-26 01:34:29,678 output drawn
+2020-03-26 01:34:31,407 R/I mode
+2020-03-26 01:34:31,423 ImageView widget data set
+2020-03-26 01:34:31,424 output drawn
+2020-03-26 01:34:32,792 mode chosen Mg/Ph
+2020-03-26 01:34:32,825 ImageView widget data set
+2020-03-26 01:34:32,826 output drawn
+2020-03-26 01:34:32,826 mode chosen Mg/Ph
+2020-03-26 01:34:32,846 ImageView widget data set
+2020-03-26 01:34:32,846 output drawn
+2020-03-26 01:34:33,653 mode chosen Mg/Ph
+2020-03-26 01:34:33,683 ImageView widget data set
+2020-03-26 01:34:33,683 output drawn
+2020-03-26 01:34:33,828 mode chosen Mg/Ph
+2020-03-26 01:34:33,848 ImageView widget data set
+2020-03-26 01:34:33,848 output drawn
+2020-03-26 01:34:34,068 mode chosen Mg/Ph
+2020-03-26 01:34:34,090 ImageView widget data set
+2020-03-26 01:34:34,090 output drawn
+2020-03-26 01:34:34,094 mode chosen Mg/Ph
+2020-03-26 01:34:34,117 ImageView widget data set
+2020-03-26 01:34:34,117 output drawn
+2020-03-26 01:34:34,121 mode chosen Mg/Ph
+2020-03-26 01:34:34,140 ImageView widget data set
+2020-03-26 01:34:34,140 output drawn
+2020-03-26 01:34:34,148 mode chosen Mg/Ph
+2020-03-26 01:34:34,170 ImageView widget data set
+2020-03-26 01:34:34,170 output drawn
+2020-03-26 01:34:35,309 mode chosen Mg/Ph
+2020-03-26 01:34:35,334 ImageView widget data set
+2020-03-26 01:34:35,335 output drawn
+2020-03-26 01:34:35,339 mode chosen Mg/Ph
+2020-03-26 01:34:35,359 ImageView widget data set
+2020-03-26 01:34:35,359 output drawn
+2020-03-26 01:34:35,363 mode chosen Mg/Ph
+2020-03-26 01:34:35,381 ImageView widget data set
+2020-03-26 01:34:35,381 output drawn
+2020-03-26 01:34:35,385 mode chosen Mg/Ph
+2020-03-26 01:34:35,404 ImageView widget data set
+2020-03-26 01:34:35,404 output drawn
+2020-03-26 01:34:35,428 mode chosen Mg/Ph
+2020-03-26 01:34:35,455 ImageView widget data set
+2020-03-26 01:34:35,455 output drawn
+2020-03-26 01:34:35,764 mode chosen Mg/Ph
+2020-03-26 01:34:35,787 ImageView widget data set
+2020-03-26 01:34:35,787 output drawn
+2020-03-26 01:34:35,796 mode chosen Mg/Ph
+2020-03-26 01:34:35,814 ImageView widget data set
+2020-03-26 01:34:35,814 output drawn
+2020-03-26 01:34:35,844 mode chosen Mg/Ph
+2020-03-26 01:34:35,863 ImageView widget data set
+2020-03-26 01:34:35,863 output drawn
+2020-03-26 01:34:35,892 mode chosen Mg/Ph
+2020-03-26 01:34:35,911 ImageView widget data set
+2020-03-26 01:34:35,911 output drawn
+2020-03-26 01:34:35,972 mode chosen Mg/Ph
+2020-03-26 01:34:35,991 ImageView widget data set
+2020-03-26 01:34:35,991 output drawn
+2020-03-26 01:34:36,844 mode chosen Mg/Ph
+2020-03-26 01:34:36,867 ImageView widget data set
+2020-03-26 01:34:36,867 output drawn
+2020-03-26 01:34:36,932 mode chosen Mg/Ph
+2020-03-26 01:34:36,951 ImageView widget data set
+2020-03-26 01:34:36,951 output drawn
+2020-03-26 01:34:36,964 mode chosen Mg/Ph
+2020-03-26 01:34:36,991 ImageView widget data set
+2020-03-26 01:34:36,991 output drawn
+2020-03-26 01:34:37,012 mode chosen Mg/Ph
+2020-03-26 01:34:37,031 ImageView widget data set
+2020-03-26 01:34:37,032 output drawn
+2020-03-26 01:34:37,076 mode chosen Mg/Ph
+2020-03-26 01:34:37,094 ImageView widget data set
+2020-03-26 01:34:37,094 output drawn
+2020-03-26 01:34:37,156 mode chosen Mg/Ph
+2020-03-26 01:34:37,174 ImageView widget data set
+2020-03-26 01:34:37,174 output drawn
+2020-03-26 01:34:37,468 mode chosen Mg/Ph
+2020-03-26 01:34:37,489 ImageView widget data set
+2020-03-26 01:34:37,489 output drawn
+2020-03-26 01:34:37,493 mode chosen Mg/Ph
+2020-03-26 01:34:37,513 ImageView widget data set
+2020-03-26 01:34:37,513 output drawn
+2020-03-26 01:34:37,517 mode chosen Mg/Ph
+2020-03-26 01:34:37,536 ImageView widget data set
+2020-03-26 01:34:37,536 output drawn
+2020-03-26 01:34:37,564 mode chosen Mg/Ph
+2020-03-26 01:34:37,583 ImageView widget data set
+2020-03-26 01:34:37,583 output drawn
+2020-03-26 01:34:38,300 mode chosen Mg/Ph
+2020-03-26 01:34:38,332 ImageView widget data set
+2020-03-26 01:34:38,332 output drawn
+2020-03-26 01:34:38,348 mode chosen Mg/Ph
+2020-03-26 01:34:38,372 ImageView widget data set
+2020-03-26 01:34:38,372 output drawn
+2020-03-26 01:34:38,412 mode chosen Mg/Ph
+2020-03-26 01:34:38,431 ImageView widget data set
+2020-03-26 01:34:38,431 output drawn
+2020-03-26 01:34:38,508 mode chosen Mg/Ph
+2020-03-26 01:34:38,535 ImageView widget data set
+2020-03-26 01:34:38,535 output drawn
+2020-03-26 01:34:38,580 mode chosen Mg/Ph
+2020-03-26 01:34:38,598 ImageView widget data set
+2020-03-26 01:34:38,598 output drawn
+2020-03-26 01:34:41,455 mode chosen Mg/Ph
+2020-03-26 01:34:41,456 uniform mode chosen
+2020-03-26 01:34:41,486 ImageView widget data set
+2020-03-26 01:34:41,486 output drawn
+2020-03-26 01:34:42,436 mode chosen Mg/Ph
+2020-03-26 01:34:42,436 uniform mode chosen
+2020-03-26 01:34:42,458 ImageView widget data set
+2020-03-26 01:34:42,458 output drawn
+2020-03-26 01:34:42,483 mode chosen Mg/Ph
+2020-03-26 01:34:42,483 uniform mode chosen
+2020-03-26 01:34:42,504 ImageView widget data set
+2020-03-26 01:34:42,504 output drawn
+2020-03-26 01:34:42,675 mode chosen Mg/Ph
+2020-03-26 01:34:42,676 uniform mode chosen
+2020-03-26 01:34:42,700 ImageView widget data set
+2020-03-26 01:34:42,700 output drawn
+2020-03-26 01:34:42,705 mode chosen Mg/Ph
+2020-03-26 01:34:42,705 uniform mode chosen
+2020-03-26 01:34:42,724 ImageView widget data set
+2020-03-26 01:34:42,724 output drawn
+2020-03-26 01:34:42,731 mode chosen Mg/Ph
+2020-03-26 01:34:42,731 uniform mode chosen
+2020-03-26 01:34:42,750 ImageView widget data set
+2020-03-26 01:34:42,751 output drawn
+2020-03-26 01:34:42,763 mode chosen Mg/Ph
+2020-03-26 01:34:42,763 uniform mode chosen
+2020-03-26 01:34:42,785 ImageView widget data set
+2020-03-26 01:34:42,785 output drawn
+2020-03-26 01:34:42,827 mode chosen Mg/Ph
+2020-03-26 01:34:42,827 uniform mode chosen
+2020-03-26 01:34:42,848 ImageView widget data set
+2020-03-26 01:34:42,848 output drawn
+2020-03-26 01:34:43,052 mode chosen Mg/Ph
+2020-03-26 01:34:43,052 uniform mode chosen
+2020-03-26 01:34:43,071 ImageView widget data set
+2020-03-26 01:34:43,071 output drawn
+2020-03-26 01:34:43,075 mode chosen Mg/Ph
+2020-03-26 01:34:43,075 uniform mode chosen
+2020-03-26 01:34:43,094 ImageView widget data set
+2020-03-26 01:34:43,095 output drawn
+2020-03-26 01:34:43,275 mode chosen Mg/Ph
+2020-03-26 01:34:43,275 uniform mode chosen
+2020-03-26 01:34:43,294 ImageView widget data set
+2020-03-26 01:34:43,294 output drawn
+2020-03-26 01:34:43,307 mode chosen Mg/Ph
+2020-03-26 01:34:43,307 uniform mode chosen
+2020-03-26 01:34:43,328 ImageView widget data set
+2020-03-26 01:34:43,328 output drawn
+2020-03-26 01:34:43,332 mode chosen Mg/Ph
+2020-03-26 01:34:43,333 uniform mode chosen
+2020-03-26 01:34:43,351 ImageView widget data set
+2020-03-26 01:34:43,351 output drawn
+2020-03-26 01:34:43,355 mode chosen Mg/Ph
+2020-03-26 01:34:43,355 uniform mode chosen
+2020-03-26 01:34:43,375 ImageView widget data set
+2020-03-26 01:34:43,375 output drawn
+2020-03-26 01:34:43,381 mode chosen Mg/Ph
+2020-03-26 01:34:43,381 uniform mode chosen
+2020-03-26 01:34:43,408 ImageView widget data set
+2020-03-26 01:34:43,408 output drawn
+2020-03-26 01:34:43,419 mode chosen Mg/Ph
+2020-03-26 01:34:43,419 uniform mode chosen
+2020-03-26 01:34:43,438 ImageView widget data set
+2020-03-26 01:34:43,438 output drawn
+2020-03-26 01:34:43,467 mode chosen Mg/Ph
+2020-03-26 01:34:43,467 uniform mode chosen
+2020-03-26 01:34:43,486 ImageView widget data set
+2020-03-26 01:34:43,486 output drawn
+2020-03-26 01:34:43,587 mode chosen Mg/Ph
+2020-03-26 01:34:43,587 uniform mode chosen
+2020-03-26 01:34:43,606 ImageView widget data set
+2020-03-26 01:34:43,606 output drawn
+2020-03-26 01:34:43,803 mode chosen Mg/Ph
+2020-03-26 01:34:43,803 uniform mode chosen
+2020-03-26 01:34:43,828 ImageView widget data set
+2020-03-26 01:34:43,828 output drawn
+2020-03-26 01:34:43,832 mode chosen Mg/Ph
+2020-03-26 01:34:43,832 uniform mode chosen
+2020-03-26 01:34:43,852 ImageView widget data set
+2020-03-26 01:34:43,852 output drawn
+2020-03-26 01:34:43,856 mode chosen Mg/Ph
+2020-03-26 01:34:43,856 uniform mode chosen
+2020-03-26 01:34:43,875 ImageView widget data set
+2020-03-26 01:34:43,876 output drawn
+2020-03-26 01:34:43,879 mode chosen Mg/Ph
+2020-03-26 01:34:43,879 uniform mode chosen
+2020-03-26 01:34:43,899 ImageView widget data set
+2020-03-26 01:34:43,899 output drawn
+2020-03-26 01:34:43,903 mode chosen Mg/Ph
+2020-03-26 01:34:43,903 uniform mode chosen
+2020-03-26 01:34:43,923 ImageView widget data set
+2020-03-26 01:34:43,923 output drawn
+2020-03-26 01:34:43,927 mode chosen Mg/Ph
+2020-03-26 01:34:43,927 uniform mode chosen
+2020-03-26 01:34:43,948 ImageView widget data set
+2020-03-26 01:34:43,948 output drawn
+2020-03-26 01:34:43,955 mode chosen Mg/Ph
+2020-03-26 01:34:43,955 uniform mode chosen
+2020-03-26 01:34:43,974 ImageView widget data set
+2020-03-26 01:34:43,974 output drawn
+2020-03-26 01:34:44,211 mode chosen Mg/Ph
+2020-03-26 01:34:44,212 uniform mode chosen
+2020-03-26 01:34:44,234 ImageView widget data set
+2020-03-26 01:34:44,234 output drawn
+2020-03-26 01:34:44,571 mode chosen Mg/Ph
+2020-03-26 01:34:44,572 uniform mode chosen
+2020-03-26 01:34:44,595 ImageView widget data set
+2020-03-26 01:34:44,595 output drawn
+2020-03-26 01:34:44,599 mode chosen Mg/Ph
+2020-03-26 01:34:44,599 uniform mode chosen
+2020-03-26 01:34:44,622 ImageView widget data set
+2020-03-26 01:34:44,622 output drawn
+2020-03-26 01:34:44,626 mode chosen Mg/Ph
+2020-03-26 01:34:44,626 uniform mode chosen
+2020-03-26 01:34:44,644 ImageView widget data set
+2020-03-26 01:34:44,644 output drawn
+2020-03-26 01:34:44,648 mode chosen Mg/Ph
+2020-03-26 01:34:44,649 uniform mode chosen
+2020-03-26 01:34:44,669 ImageView widget data set
+2020-03-26 01:34:44,669 output drawn

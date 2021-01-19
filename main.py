@@ -4,25 +4,30 @@ from PyQt5 import QtWidgets
 from PyQt5.QtWidgets import QMessageBox
 import image
 from functools import partial
+import logging
 
 class phaseMonster(ui.Ui_MainWindow):
     # Main Application Class
     def __init__(self, starterWindow):
         super(phaseMonster, self).setupUi(starterWindow)
+        self.imageName = None  # holds image path
+        self.imageFormat = None  # holds image format
         self.mixer = image.mixer2Image()  # holds the mixer object from image.py
         self.image1 = image.image()  # holds the image object from image.py
         self.image2 = image.image()  # holds the image object from image.py
-        self.out1 = image.image()
-        self.out2 = image.image()
+        self.out1 = image.image()  # holds the image object of the first output
+        self.out2 = image.image()  # holds the image object of the second output
         self.imagesShapes = []  # holds images shapes loaded to be checked
         self.images = [self.image1, self.image2]  # not used may be deleted later
+        self.logger = logging.getLogger()
+        self.logger.setLevel(logging.DEBUG)
 
         # UI components
         self.imageWidgets = [self.imageOneOrigin, self.imageTwoOrigin, self.imageOneMods, self.imageTwoMods,
                              self.output1, self.output2]
+
         self.sliders = [self.slider1, self.slider2]
-        self.cmbxs = [self.image1Cmbx, self.image2Cmbx, self.mixerOutput, self.mixerCmbx1, self.mixerCmbx2,
-                      self.component1, self.component2]  # not used maybe deleted later
+
         self.showCmbxs = [self.image1Cmbx, self.image2Cmbx]
 
         self.mixerCmbxs = [self.mixerCmbx1, self.mixerCmbx2]
@@ -50,7 +55,7 @@ class phaseMonster(ui.Ui_MainWindow):
 
         for index, mxrbx in enumerate(self.mixerCmbxs):
             mxrbx.currentTextChanged.connect(self.chosenOutput)
-            mxrbx.currentTextChanged.connect(partial(self.setComponents, index))
+            mxrbx.currentTextChanged.connect(self.setComponents)
 
         for index, component in enumerate(self.componentCmbxs):
             component.currentTextChanged.connect(self.chosenOutput)
@@ -69,34 +74,47 @@ class phaseMonster(ui.Ui_MainWindow):
         print(Indx)
         self.imageName, self.imageFormat = QtWidgets.QFileDialog.getOpenFileName(None, "Load Image %s" % Indx,
                                                                                  filter="*.jpg")
+
+        self.logger.debug("image from:%s"%self.imageName)
         if self.imageName == "":
-            print("user cancelled loading")
+            self.logger.debug("loading cancelled")
             pass
         else:
             if Indx == 1:
-                self.showImage(self.image1, self.imageOneOrigin, imageName= self.imageName)
-                self.mixer.deleteImage(0)
-                self.mixer.addImage(self.image1)
-                self.imageOneMods.clear()
-                self.chosenOutput()
+                self.__loadImage(self.image1, self.imageOneOrigin, self.imageOneMods, self.imageName, 1,True)
+                self.logger.debug("loading done")
+
                 try:
                     self.selectComponents(Indx)
                 except ValueError:  # this case happens when the user loads a different sized images
                     print("user loaded different sizes, image%s"%Indx)
                     pass
+
             elif Indx == 2:
-                self.showImage(self.image2, self.imageTwoOrigin, imageName= self.imageName)
-                self.mixer.deleteImage(1)
-                self.mixer.addImage(self.image2, shifted=True)
-                self.imageTwoMods.clear()
-                self.chosenOutput()
+                self.__loadImage(self.image2, self.imageTwoOrigin, self.imageTwoMods, self.imageName, 2,True)
                 try:
                     self.selectComponents(Indx)
                 except ValueError: # this case happens when the user loads a different sized images
                     print("user loaded different sizes, image %s "%Indx)
                     pass
             else:
-                print("some Error")
+                print("some Error") # may not be executed
+
+    def __loadImage(self, imageInst: image.image, widget: "pyqtgraph.ImageView", clearedWid: "pyqtgraph.ImageView",
+                    path: str, indx: int, shifted: bool = False):
+        """
+        A mask for loadImage
+        """
+        try:
+            self.showImage(imageInst, widget, imageName=path)
+            self.mixer.deleteImage(indx-1)
+            self.mixer.addImage(imageInst, shifted=shifted)
+            clearedWid.clear()
+            self.chosenOutput()
+
+        except ValueError:
+            print("user loaded different sizes")
+            pass
 
     def selectComponents(self, image: int):
         """
@@ -125,6 +143,7 @@ class phaseMonster(ui.Ui_MainWindow):
         ============= =====================================================================
         """
         imageInst.fourierTransform(shifted=shifted)
+        self.logger.debug("selected %s to be shown for %s" % (mode, widget.name))
         if mode == 'Magnitude':
             self.showImage(imageInst, widget, checkShape=checkShape,
                            widgetData=imageInst.magnitude(logScale=logScale).T)
@@ -162,36 +181,53 @@ class phaseMonster(ui.Ui_MainWindow):
         widget.view.setAspectLocked(False)
         widget.view.setRange(xRange=[0, imageInst.imageShape[1]],
                              yRange=[0, imageInst.imageShape[0]], padding=0)
+        self.logger.debug("%s widget data set"% widget.name)
 
         if checkShape and self.image1.imageShape != self.image2.imageShape and \
                 self.image1.imageShape != None and self.image2.imageShape != None:
             self.showMessage("Warning", "You loaded two different sizes of images, Please choose another",
                              QMessageBox.Ok, QMessageBox.Warning)
+            self.logger.debug("different sizes loaded")
             widget.clear()
             imageInst.clear()
 
     def chosenOutput(self):
-        try: # TODO : Optimize this
+        """
+        Called on amy change in ui mixer part.
+        Implements the following:
+        * checks for which output is chosen
+        * route the the mixer values to the widget and set it`s data
+        """
+        try:
             if self.mixerOutput.currentText() == "Output 1":
-                self.out1.loadImage(fourier= self.__mixer(), imageShape=self.image1.imageShape)
-                self.out1.inverseFourier()
-                self.showImage(self.out1, self.output1, False, self.out1.imageFourierInv.T)
+                self.__chosenOutput(self.out1, self.image1.imageShape, self.output1)
 
             elif self.mixerOutput.currentText() == "Output 2":
-                self.out2.loadImage(fourier= self.__mixer(), imageShape=self.image1.imageShape)
-                self.out2.inverseFourier()
-                self.showImage(self.out2, self.output2, False, self.out2.imageFourierInv.T)
+                self.__chosenOutput(self.out2, self.image1.imageShape, self.output2)
 
             else: print("Some error in output chosen")
+
         except IndexError:
             self.showMessage("Heads Up", "Please Load another image for comparing part", QMessageBox.Ok, QMessageBox.Warning)
             pass
 
-    def setComponents(self, index):
-        if self.componentCmbxs[index] == "Magnitude" or self.componentCmbxs[index] == "Phase":
-            self.componentCmbxs[~index].setCurrentIndex(0)
-        if self.componentCmbxs[index] == "Real Component" or self.componentCmbxs[index] == "Imaginary Component":
-            self.componentCmbxs[~index].setCurrentIndex(1)
+    def __chosenOutput(self, outInst: image.image, imageShape, widget: "pyqtgraph.ImageView", checkShape:bool = False):
+        """
+        A mask for chosenOutput
+        """
+        outInst.loadImage(fourier=self.__mixer(), imageShape=imageShape)
+        outInst.inverseFourier()
+        self.showImage(outInst, widget, checkShape, outInst.imageFourierInv.T)
+        self.logger.debug("output drawn")
+
+    def setComponents(self):
+        """
+        Checks user choices and correct them
+        """
+        if self.componentCmbxs[0].currentText() == "Magnitude":
+            self.componentCmbxs[1].setCurrentIndex(0)
+        if self.componentCmbxs[0].currentText() == "Real Component" :
+            self.componentCmbxs[1].setCurrentIndex(1)
 
     def showMessage(self, header, message, button, icon):
         """
@@ -209,24 +245,42 @@ class phaseMonster(ui.Ui_MainWindow):
         msg.setText(message)
         msg.setIcon(icon)
         msg.setStandardButtons(button)
+        self.logger.debug("messege shown with %s %s "%(header, message))
         msg.exec_()
 
     def __mixer(self) -> "numpy.ndarray":
-        if self.componentCmbxs[0].currentText() == "Magnitude" and self.componentCmbxs[1].currentText() == "Phase":
+        """
+        Main mixing function
+        """
+        self.setComponents()
+        if self.componentCmbxs[0].currentText() == "Magnitude" or self.componentCmbxs[1].currentText() == "Phase":
             print("MG/PH mode")
+            self.logger.debug("mode chosen Mg/Ph")
+
+            if self.componentCmbxs[0].currentText() == "Uniform Magnitude" or self.componentCmbxs[1].currentText() == "Uniform Phase":
+                self.logger.debug("uniform mode chosen")
+                return self.mixer.mix(self.sliders[0].value() / 10, self.sliders[1].value() / 10,
+                               self.mixerCmbxs[0].currentIndex(), self.mixerCmbxs[1].currentIndex(),
+                               image.Modes.magnitudePhase, self.componentCmbxs[0].currentText()=="Uniform Magnitude",
+                               self.componentCmbxs[1].currentText() == "Uniform Phase")
+
             return self.mixer.mix(self.sliders[0].value()/10, self.sliders[1].value()/10,
                            self.mixerCmbxs[0].currentIndex(), self.mixerCmbxs[1].currentIndex(), mode=image.Modes.magnitudePhase)
 
-        if self.componentCmbxs[1].currentText() == "Imaginary Component" and self.componentCmbxs[0].currentText() == "Real Component":
-            print("R/I mode")
+        if self.componentCmbxs[1].currentText() == "Imaginary Component" or self.componentCmbxs[0].currentText() == "Real Component":
+            self.logger.debug("R/I mode")
             return self.mixer.mix(self.sliders[0].value()/10, self.sliders[1].value()/10,
                            self.mixerCmbxs[0].currentIndex(), self.mixerCmbxs[1].currentIndex(), mode=image.Modes.realImaginary)
+        self.showMessage("Heads up", "Choose a valid mode",QMessageBox.Ok, QMessageBox.Warning)
 
-        self.showMessage("Warning","Please Select a valid mode",QMessageBox.Ok, QMessageBox.Warning)
+
 
 if __name__ == "__main__":
     import sys
 
+    logging.basicConfig(filename="logs/logfile.log",
+                        format='%(asctime)s %(message)s',
+                        filemode='w')
     app = QtWidgets.QApplication(sys.argv)
     MainWindow = QtWidgets.QMainWindow()
     ui = phaseMonster(MainWindow)
